@@ -1978,19 +1978,36 @@ footer h2 {
 .mt {
   margin-top: 20px;
 }
-/* Loader: bedekt de pagina tot alle afbeeldingen geladen zijn */
+
+/* Wrapper rond het grid: de loader staat enkel hierin */
+.grid-wrap {
+  position: relative;
+  min-height: 50vh;
+}
+
+/* Grid is onzichtbaar tot alle afbeeldingen geladen zijn */
+.grid-wrap .grid {
+  transition: opacity 0.5s ease;
+}
+
+.grid-wrap.is-loading .grid {
+  opacity: 0;
+}
+
+/* Loader bovenaan in het grid-gebied */
 .loader {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: 9999;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1.25rem;
-  background: #093a36;
-  color: #fff;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  padding-top: 6rem;
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
 }
 
 .loader.done {
@@ -2001,17 +2018,14 @@ footer h2 {
 .loader-spinner {
   width: 56px;
   height: 56px;
-  border: 4px solid rgba(255, 255, 255, 0.2);
+  border: 4px solid rgba(128, 128, 128, 0.25);
   border-top-color: #ef8f21;
   border-radius: 50%;
   animation: loader-spin 0.9s linear infinite;
 }
 
 @keyframes loader-spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Geen scrollen terwijl de loader zichtbaar is */
-body.is-loading {
-  overflow: hidden;
+  to {
+    transform: rotate(360deg);
+  }
 }

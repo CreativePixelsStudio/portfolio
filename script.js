@@ -324,13 +324,13 @@ window.addEventListener("scroll", function () {
 (function () {
   "use strict";
 
+  var wrap = document.getElementById("grid-wrap");
   var loader = document.getElementById("loader");
-  if (!loader) return; // enkel op de pagina Mijn werk
+  if (!wrap || !loader) return; // enkel op de pagina Mijn werk
 
   var images = Array.prototype.slice.call(
     document.querySelectorAll("#grid img"),
   );
-  document.body.classList.add("is-loading");
 
   // Geeft een belofte terug die klaar is als de afbeelding geladen is of faalt
   function waitFor(img) {
@@ -343,8 +343,8 @@ window.addEventListener("scroll", function () {
   }
 
   function hideLoader() {
-    loader.classList.add("done");
-    document.body.classList.remove("is-loading");
+    wrap.classList.remove("is-loading"); // grid verschijnt
+    loader.classList.add("done"); // loader vervaagt
     loader.addEventListener(
       "transitionend",
       function () {
