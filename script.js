@@ -319,3 +319,45 @@ window.addEventListener("scroll", function () {
     nav.classList.remove("sticky");
   }
 });
+
+// Loader: wacht tot alle afbeeldingen in het grid geladen zijn
+(function () {
+  "use strict";
+
+  var loader = document.getElementById("loader");
+  if (!loader) return; // enkel op de pagina Mijn werk
+
+  var images = Array.prototype.slice.call(
+    document.querySelectorAll("#grid img"),
+  );
+  document.body.classList.add("is-loading");
+
+  // Geeft een belofte terug die klaar is als de afbeelding geladen is of faalt
+  function waitFor(img) {
+    return new Promise(function (resolve) {
+      img.loading = "eager"; // lazy uitzetten zodat alles meteen laadt
+      if (img.complete && img.naturalWidth > 0) return resolve();
+      img.addEventListener("load", resolve, { once: true });
+      img.addEventListener("error", resolve, { once: true });
+    });
+  }
+
+  function hideLoader() {
+    loader.classList.add("done");
+    document.body.classList.remove("is-loading");
+    loader.addEventListener(
+      "transitionend",
+      function () {
+        loader.remove();
+      },
+      { once: true },
+    );
+  }
+
+  // Vangnet: na 10 seconden verdwijnt de loader sowieso
+  var timeout = new Promise(function (resolve) {
+    setTimeout(resolve, 10000);
+  });
+
+  Promise.race([Promise.all(images.map(waitFor)), timeout]).then(hideLoader);
+})();
